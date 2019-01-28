@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import TableComponent from '../../components/table';
+import TableContainer from '../Table/container';
 import { fetchMenuItems, deleteMenuItems } from './reducer';
+import { Button } from 'semantic-ui-react'
 import { connect } from 'react-redux';
 
 class MenuItemList extends Component {
@@ -12,7 +13,7 @@ class MenuItemList extends Component {
     switch (attr) {
       case 'availablity':
         return (value || []).join(',');
-      default:
+      default: return;
 
     }
   }
@@ -26,7 +27,8 @@ class MenuItemList extends Component {
     return(
       <div>
         MenuItem list
-        <TableComponent data={menuItems} records={[{header: 'Name', column: 'name', sortable: true},{header: 'Description', column: 'desc', sortable: true}, {header: 'Category', column: 'category'}, {header: 'Availablity', column: 'availablity'},{header: 'Expertised', column: 'isExpertised'}, {header: 'Feasible', column: 'isFeasible'}, {header: 'Actions', column: 'action'}]} includeAction complexRecords={['availablity']} mandatoryFeilds={['name']} searchKeys={{name: true, desc: true}} findComplexRecords={this.findComplexRecords} name="Menuitems" defaultSortable='name' bulkActions={[{action: 'delete', function: this.onDelete}]}
+        {/* <Button>New Item</Button> */}
+        <TableContainer data={menuItems} records={[{header: 'Name', column: 'name', sortable: true},{header: 'Description', column: 'desc', sortable: true}, {header: 'Category', column: 'category'}, {header: 'Availablity', column: 'availablity'},{header: 'Expertised', column: 'isExpertised'}, {header: 'Feasible', column: 'isFeasible'}, {header: 'Actions', column: 'action'}]} includeAction complexRecords={['availablity']} mandatoryFeilds={['name']} searchKeys={{name: true, desc: true}} findComplexRecords={this.findComplexRecords} name="Menuitems" defaultSortable='name' bulkActions={[{action: 'delete', function: this.onDelete}]}
         />
       </div>
     );

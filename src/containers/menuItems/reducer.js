@@ -22,6 +22,7 @@ export function deleteMenuItemStore(payload) {
 }
 
 export function deleteMenuItemsStore(payload) {
+  debugger
   return {
     type: actions.DELETE_MENU_ITEMS,
     payload,
