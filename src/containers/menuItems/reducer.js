@@ -1,5 +1,6 @@
 import { menuItemsUrl } from '../../config/api';
 import { getApi, postApi} from '../../api/utils';
+import { setSelectedRows, setBulkSelect } from '../Table/tableReducer'
 import createReducer from '../../lib/createReducer';
 
 let actions = {};
@@ -47,8 +48,9 @@ export function deleteMenuItems(ids) {
       let response = await postApi(`${menuItemsUrl}/deleteAll`, {
         ids: ids
       })
-
       dispatch(deleteMenuItemsStore(response.data))
+      dispatch(setSelectedRows([]))
+      dispatch(setBulkSelect(false))
     }
     catch (error) {
       console.error(error);
@@ -64,14 +66,11 @@ export const menuItems = createReducer([], {
   [actions.DELETE_MENU_ITEMS](state, {payload}) {
     let newState = [...state];
     payload.forEach(itemId => {
-      const indexOfItemToDelete = state.findIndex(m => {
-        return m._id === itemId;
-      });
+      const indexOfItemToDelete = newState.findIndex(m => m._id === itemId);
       if (indexOfItemToDelete !== -1) {
         newState.splice(indexOfItemToDelete, 1);
       }
     });
-    debugger
     return newState;
   },
 });
