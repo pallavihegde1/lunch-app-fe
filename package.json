@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "eslint": "^5.12.1",
     "localforage": "^1.7.3",
     "lodash": "^4.17.11",
     "prop-types": "^15.6.2",

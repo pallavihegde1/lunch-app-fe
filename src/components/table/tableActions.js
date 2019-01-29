@@ -13,7 +13,7 @@ const TableActions = (props) =>  {
   return (
     <div>
       {props.actions.map((action) => (
-        <Button color={findColor(action)}> {action} </Button>
+        <Button color={findColor(action.action)} onClick={() => action.function([props.ids])}> {action.action} </Button>
       ))}
     </div>
   )

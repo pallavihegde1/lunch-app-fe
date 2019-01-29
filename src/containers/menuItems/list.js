@@ -28,7 +28,16 @@ class MenuItemList extends Component {
       <div>
         MenuItem list
         {/* <Button>New Item</Button> */}
-        <TableContainer data={menuItems} records={[{header: 'Name', column: 'name', sortable: true},{header: 'Description', column: 'desc', sortable: true}, {header: 'Category', column: 'category'}, {header: 'Availablity', column: 'availablity'},{header: 'Expertised', column: 'isExpertised'}, {header: 'Feasible', column: 'isFeasible'}, {header: 'Actions', column: 'action'}]} includeAction complexRecords={['availablity']} mandatoryFeilds={['name']} searchKeys={{name: true, desc: true}} findComplexRecords={this.findComplexRecords} name="Menuitems" defaultSortable='name' bulkActions={[{action: 'delete', function: this.onDelete}]}
+        <TableContainer data={menuItems}
+          records={[{header: 'Name', column: 'name', sortable: true},{header: 'Description', column: 'desc', sortable: true}, {header: 'Category', column: 'category'}, {header: 'Availablity', column: 'availablity'},{header: 'Expertised', column: 'isExpertised'}, {header: 'Feasible', column: 'isFeasible'}, {header: 'Actions', column: 'action'}]}
+          includeAction
+          complexRecords={['availablity']}
+          mandatoryFeilds={['name']}
+          searchKeys={{name: true, desc: true}}
+          findComplexRecords={this.findComplexRecords}
+          name="Menuitems" defaultSortable='name'
+          bulkActions={[{action: 'delete', function: this.onDelete}]}
+          actions={[{action: 'Delete', function: this.onDelete}, {action: 'Edit', function: this.onEdit}]}
         />
       </div>
     );

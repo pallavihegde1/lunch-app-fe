@@ -154,7 +154,7 @@ class TableComponent extends Component {
                 </Table.Cell>
                 {visibleColumns.map(c => c.column).map((cell) => (
                   cell !== 'action' ?
-                  <Table.Cell> {props.complexRecords.includes(cell) ? props.findComplexRecords(cell, data[cell])  : data[cell]} </Table.Cell> : <Table.Cell> <TableActions actions={['Edit', 'Delete']}/> </Table.Cell>
+                  <Table.Cell> {props.complexRecords.includes(cell) ? props.findComplexRecords(cell, data[cell])  : data[cell]} </Table.Cell> : <Table.Cell> <TableActions actions={props.actions} ids={data._id}/> </Table.Cell>
                 ))}
               </Table.Row>
             ))}
