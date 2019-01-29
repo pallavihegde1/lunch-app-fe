@@ -7,14 +7,14 @@ import TablePagination from '../../components/table/tablePagination';
 import Search from '../../components/table/tableSearch';
 import BulkActionList from '../../components/table/bulkActionDropdown';
 import { findPageRange, findStartPage, findCurrentData } from '../../components/table/utils';
-import { SetRowsPerPage, SetPages, SetCurrentPage } from './reducer';
+import { SetRowsPerPage, SetPages, SetCurrentPage } from './paginationReducer';
+import { setColumns, setSearchedDataFound, setSearchText, setDefaultSortable, setBulkSelect, setSelectedRows} from './tableReducer';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
 class TableComponent extends Component {
   constructor(props){
     super(props);
-    const rowsPerPage = { value: 10, label: '10 Items' };
     this.state = {
       columns: props.records.map(m => {
         const obj = m
@@ -30,12 +30,20 @@ class TableComponent extends Component {
   }
 
   componentWillMount(){
-    const rowsPerPage = { value: 10, label: '10 Items' }
     const numberOfPages = Math.ceil(
-     this.props.data.length / rowsPerPage.value
+     this.props.data.length / this.props.tablePagination.rowsPerPage.value
     )
-    this.props.dispatch(SetRowsPerPage(rowsPerPage))
+    const columns =  this.props.records.map(m => {
+      const obj = m
+       obj['value'] = true
+       return obj
+     })
+     const searchedDataFound = this.sortedData(this.props.data)
+     const defaultSortable = this.props.defaultSortable
     this.props.dispatch(SetPages(numberOfPages))
+    this.props.dispatch(setColumns(columns))
+    this.props.dispatch(setSearchedDataFound(searchedDataFound))
+    this.props.dispatch(setDefaultSortable(defaultSortable))
   }
 
    componentDidUpdate(prevProps) {

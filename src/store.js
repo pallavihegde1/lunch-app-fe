@@ -19,6 +19,7 @@ const configureStore = composeEnhancers(applyMiddleware(...middleware))(
 const config = {
   key: 'root',
   storage: localforage,
+  whitelist: []
 };
 
 const combinedReducer = persistReducer(config, reducer);
