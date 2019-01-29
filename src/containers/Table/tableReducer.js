@@ -69,6 +69,9 @@ export const table = createReducer(initialState, {
   [actions.SEARCH_TEXT](state, action) {
     return { ...state, ...action.payload };
   },
+  [actions.SET_DEFAULT_SORTABLE](state, action) {
+    return { ...state, ...action.payload };
+  },
   [actions.SET_BULK_SELECT](state, action) {
     return { ...state, ...action.payload };
   },

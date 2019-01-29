@@ -13,21 +13,6 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 class TableComponent extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      columns: props.records.map(m => {
-        const obj = m
-         obj['value'] = true
-         return obj
-       }),
-      searchedDataFound: this.sortedData(props.data),
-      searchText: '',
-      defaultSortable: props.defaultSortable,
-      bulkSelect: false,
-      selectedRows: []
-    };
-  }
 
   componentWillMount(){
     const numberOfPages = Math.ceil(
@@ -52,26 +37,24 @@ class TableComponent extends Component {
        prevProps.data.length / this.props.tablePagination.rowsPerPage.value
       )
       this.props.dispatch(SetPages(numberOfPages))
+      this.props.dispatch(setSearchedDataFound(this.props.data))
     }
-    // this.setState({
-    //   searchedDataFound: this.sortedData(this.props.data),
-    // });
   }
 
   sortedData = (data) => {
-    const defaultSortable = (this.state || {}).defaultSortable
+    const {defaultSortable = ''} = this.props.table
     return _.sortBy(data, defaultSortable);
   }
 
   toggleColumns = (column, {checked}) => {
-    let columns = this.state.columns
-    let updatedColumn = this.state.columns.find(c => c.header === column) || {}
+    let columns = this.props.table.columns
+    let updatedColumn = columns.find(c => c.header === column) || {}
     updatedColumn.value = !checked
-    this.setState({ columns })
+    this.props.dispatch(setColumns(columns))
   }
 
   setTableCurrentPage = currentPage => {
-    this.setState({ currentPage });
+    this.props.dispatch(SetCurrentPage(currentPage))
   };
 
   onSelectRowsPerPage = rowsPerPage => {
@@ -80,7 +63,7 @@ class TableComponent extends Component {
       : { value: 10, label: '10 Items' };
     let currentPage = this.props.tablePagination.currentPage;
     const numberOfPages = Math.ceil(
-      this.state.searchedDataFound.length / selectedRowsPerPage.value
+      this.props.table.searchedDataFound.length / selectedRowsPerPage.value
     );
     if (numberOfPages < currentPage) currentPage = numberOfPages;
     this.props.dispatch(SetCurrentPage(currentPage))
@@ -95,37 +78,37 @@ class TableComponent extends Component {
   currentPage = this.props.tablePagination.currentPage
   ) => {
     searchedDataFound = this.sortedData(searchedDataFound)
-    this.setState({
-      searchedDataFound,
-      searchText,
-    });
     this.props.dispatch(SetCurrentPage(currentPage))
     this.props.dispatch(SetPages(numberOfPages))
+    this.props.dispatch(setSearchedDataFound(searchedDataFound))
+    this.props.dispatch(setSearchText(searchText))
   };
 
   updateDefaultSortable = async(column) => {
-    await this.setState({defaultSortable: column.column})
-    const searchedDataFound = this.sortedData(this.state.searchedDataFound)
-    this.setState({searchedDataFound})
+    await this.props.dispatch(setDefaultSortable(column.column))
+    const searchedDataFound = this.sortedData(this.props.table.searchedDataFound)
+    this.props.dispatch(setSearchedDataFound(searchedDataFound))
   }
 
   enableBulkSelect = ({checked}) => {
-    const selectedRows = checked ? this.state.searchedDataFound.map(i => i._id) : []
-    this.setState({bulkSelect: checked, selectedRows})
+    const selectedRows = checked ? this.props.table.searchedDataFound.map(i => i._id) : []
+    this.props.dispatch(setBulkSelect(checked))
+    this.props.dispatch(setSelectedRows(selectedRows))
   }
 
   updateSelectedRows = ({checked}, row_id) => {
-    let selectedRows = this.state.selectedRows
+    let selectedRows = this.props.table.selectedRows
     const rowIndex = selectedRows.indexOf(row_id);
     if (rowIndex > -1 && !checked) selectedRows.splice(rowIndex, 1);
     if (rowIndex === -1) selectedRows.push(row_id);
-    this.setState({selectedRows});
+    this.props.dispatch(setSelectedRows(selectedRows))
   }
 
   render(){
     const props = this.props
-    const visibleColumns = this.state.columns.filter(d => d.value)
-    const hiddenColumnCount = this.state.columns.filter(d => !d.value).length
+    const {table} = this.props
+    const visibleColumns = table.columns.filter(d => d.value)
+    const hiddenColumnCount = table.columns.filter(d => !d.value).length
     const {tablePagination} = this.props
     const startPage = findStartPage(
       tablePagination.numberOfPages,
@@ -134,7 +117,7 @@ class TableComponent extends Component {
     const pageRange = findPageRange(tablePagination.numberOfPages, startPage);
     //slice current data set
     const currentData = findCurrentData(
-      this.state.searchedDataFound,
+      table.searchedDataFound,
       tablePagination.currentPage,
       tablePagination.rowsPerPage
     );
@@ -142,21 +125,21 @@ class TableComponent extends Component {
     return(
       <div>
         <div>
-          <HeaderSelector hiddenColumnCount = {hiddenColumnCount} columns={this.state.columns.filter(c => !props.mandatoryFeilds.includes(c.column))} toggleColumns={this.toggleColumns}/>
-          <Search searchText={this.state.searchText} fullData={this.props.data}
+          <HeaderSelector hiddenColumnCount = {hiddenColumnCount} columns={table.columns.filter(c => !props.mandatoryFeilds.includes(c.column))} toggleColumns={this.toggleColumns}/>
+          <Search searchText={table.searchText} fullData={props.data}
                   searchKeys={this.props.searchKeys}
                   rowsPerPage={tablePagination.rowsPerPage}
                   setSearchedData={this.setSearchedData}
                 />
 
-        {hasBulkActions && this.state.selectedRows.length ? <BulkActionList bulkActions={this.props.bulkActions} selectedRows={this.state.selectedRows}/> : null}
+        {hasBulkActions && table.selectedRows.length ? <BulkActionList bulkActions={this.props.bulkActions} selectedRows={table.selectedRows}/> : null}
         </div>
         <Table celled>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>{hasBulkActions ? <Checkbox checked={this.state.bulkSelect} onChange={(e, {checked}) => this.enableBulkSelect({checked})}/> : null } Sl.no</Table.HeaderCell>
+              <Table.HeaderCell>{hasBulkActions ? <Checkbox checked={table.bulkSelect} onChange={(e, {checked}) => this.enableBulkSelect({checked})}/> : null } Sl.no</Table.HeaderCell>
               {visibleColumns.map((column) => (
-                <Table.HeaderCell onClick={() => this.updateDefaultSortable(column)}>{column.column === this.state.defaultSortable ? <Icon name='arrow down'/> : null } {column.header}</Table.HeaderCell>
+                <Table.HeaderCell onClick={() => this.updateDefaultSortable(column)}>{column.column === table.defaultSortable ? <Icon name='arrow down'/> : null } {column.header}</Table.HeaderCell>
               ))}
             </Table.Row>
           </Table.Header>
@@ -167,7 +150,7 @@ class TableComponent extends Component {
                   <Label ribbon>
                     {(tablePagination.currentPage - 1) * tablePagination.rowsPerPage.value + index + 1}
                   </Label>
-                  {hasBulkActions ? <Checkbox checked={this.state.selectedRows.includes(data._id)} onChange={(e, {checked}) => this.updateSelectedRows({checked}, data._id)}/> :  null}
+                  {hasBulkActions ? <Checkbox checked={table.selectedRows.includes(data._id)} onChange={(e, {checked}) => this.updateSelectedRows({checked}, data._id)}/> :  null}
                 </Table.Cell>
                 {visibleColumns.map(c => c.column).map((cell) => (
                   cell !== 'action' ?
@@ -203,7 +186,7 @@ TableComponent.defaultProps = {
   bulkActions: []
 }
 
-const mapStateToProps = ({tablePagination}) => ({tablePagination})
+const mapStateToProps = ({tablePagination, table}) => ({tablePagination, table})
 
 export default connect(
     mapStateToProps,
