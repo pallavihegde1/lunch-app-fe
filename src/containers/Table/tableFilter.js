@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Popup, Button, Icon, List, Grid } from 'semantic-ui-react'
+import { Popup, Button, Icon, List, Grid, Input } from 'semantic-ui-react'
 import Select from 'react-select';
-import { predicateOptions } from '../constants';
+import { predicateOptions, filterQueriesOptions } from '../constants';
 
 class TableFilter extends Component {
   render(){
@@ -10,6 +10,7 @@ class TableFilter extends Component {
         trigger={<span><Icon name='filter'/> Filter </span>}
         content={<FilterDiv {...this.props}/>}
         on='click'
+        position='bottom right'
       />
     );
   }
@@ -17,7 +18,7 @@ class TableFilter extends Component {
 
 const FilterDiv = props => {
   return (
-    <div style={{width: '50em'}}>
+    <div style={{width: '60em'}}>
       <List divided relaxed>
         {props.selectedFilters.map((column, index) => (
           <List.Item>
@@ -43,7 +44,7 @@ const FilterGrid = props => {
         <Grid.Column>
           <Select
             isSearchable={false}
-            options={predicateOptions}
+            options={props.index === 0 ? [{value: 'Where', label: 'Where'}] : predicateOptions}
             value={{value: props.column.predicate, label: props.column.predicate}}
             onChange={(value) => props.updateSelectedfilters('predicate',value.value, props.index)}
           />
@@ -56,10 +57,14 @@ const FilterGrid = props => {
           />
         </Grid.Column>
         <Grid.Column>
-          Contains
+          <Select
+            options={filterQueriesOptions}
+            value={{value: props.column.query, label: props.column.query}}
+            onChange={(value) => props.updateSelectedfilters('query',value.value, props.index)}
+          />
         </Grid.Column>
         <Grid.Column>
-            Value
+            <Input placeholder='Search...' onBlur={(e) => props.updateSelectedfilters('value',e.target.value, props.index)}/>
         </Grid.Column>
       </Grid.Row>
   </Grid>

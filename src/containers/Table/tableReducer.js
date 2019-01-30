@@ -71,12 +71,12 @@ export function setSelectedFilters(payload){
 export function addFilterRow(attribute) {
   return async function(dispatch, getState) {
     try {
+      const filters = getState().table.selectedFilters
       let newFilter = {}
-      newFilter.predicate = 'Where'
+      newFilter.predicate = filters.length ? 'And' : 'Where'
       newFilter.attribute = attribute.column
       newFilter.query = 'Contains'
       newFilter.value = ''
-      const filters = getState().table.selectedFilters
       filters.push(newFilter)
       dispatch(setSelectedFilters(filters))
     }
@@ -91,6 +91,9 @@ export function removeFilterRow(index) {
     try {
       const filters = getState().table.selectedFilters
       filters.splice(index, 1)
+      if (filters.length === 1) {
+        filters[0].predicate = 'Where'
+      }
       dispatch(setSelectedFilters(filters))
     }
     catch (error) {
