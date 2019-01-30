@@ -9,7 +9,7 @@ import TableFilter from './tableFilter';
 import BulkActionList from '../../components/table/bulkActionDropdown';
 import { findPageRange, findStartPage, findCurrentData } from '../../components/table/utils';
 import { SetRowsPerPage, SetPages, SetCurrentPage } from './paginationReducer';
-import { setColumns, setSearchedDataFound, setSearchText, setDefaultSortable, setBulkSelect, setSelectedRows, addFilterRow, removeFilterRow} from './tableReducer';
+import { setColumns, setSearchedDataFound, setSearchText, setDefaultSortable, setBulkSelect, setSelectedRows, addFilterRow, removeFilterRow, updateFilterRow} from './tableReducer';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -114,6 +114,10 @@ class TableComponent extends Component {
     this.props.dispatch(removeFilterRow(index))
   }
 
+  updateSelectedfilters = (attribute,value, index) => {
+    this.props.dispatch(updateFilterRow(attribute, value, index))
+  }
+
   render(){
     const props = this.props
     const {table} = this.props
@@ -132,7 +136,9 @@ class TableComponent extends Component {
       tablePagination.rowsPerPage
     );
     const hasBulkActions = props.bulkActions.length
-    const filterableColumns = props.records.filter(r => r.filterable)
+    const filterableColumns = props.records.filter(r => r.filterable).map(c => {
+      return {value: c.column, label: c.header}
+    })
     return(
       <div>
         <Grid columns={3} divided>
@@ -151,7 +157,7 @@ class TableComponent extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              <TableFilter filterableColumns={filterableColumns} selectedFilters={table.selectedFilters} addFilter={this.addFilter} removeFilter={this.removeFilter}/>
+              <TableFilter filterableColumns={filterableColumns} selectedFilters={table.selectedFilters} addFilter={this.addFilter} removeFilter={this.removeFilter} updateSelectedfilters={this.updateSelectedfilters}/>
             </Grid.Column>
           </Grid.Row>
       </Grid>

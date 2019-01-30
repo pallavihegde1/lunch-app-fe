@@ -72,7 +72,7 @@ export function addFilterRow(attribute) {
   return async function(dispatch, getState) {
     try {
       let newFilter = {}
-      newFilter.predicate = 'where'
+      newFilter.predicate = 'Where'
       newFilter.attribute = attribute.column
       newFilter.query = 'Contains'
       newFilter.value = ''
@@ -91,6 +91,20 @@ export function removeFilterRow(index) {
     try {
       const filters = getState().table.selectedFilters
       filters.splice(index, 1)
+      dispatch(setSelectedFilters(filters))
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+}
+
+export function updateFilterRow(attribute, value, index) {
+  return async function(dispatch, getState) {
+    try {
+      const filters = getState().table.selectedFilters
+      let filterTobeUpdated = filters[index]
+      filterTobeUpdated[attribute] = value
       dispatch(setSelectedFilters(filters))
     }
     catch (error) {

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Popup, Button, Icon, List, Grid } from 'semantic-ui-react'
+import Select from 'react-select';
+import { predicateOptions } from '../constants';
 
 class TableFilter extends Component {
   render(){
@@ -7,7 +9,7 @@ class TableFilter extends Component {
       <Popup
         trigger={<span><Icon name='filter'/> Filter </span>}
         content={<FilterDiv {...this.props}/>}
-        hoverable
+        on='click'
       />
     );
   }
@@ -15,12 +17,12 @@ class TableFilter extends Component {
 
 const FilterDiv = props => {
   return (
-    <div>
+    <div style={{width: '50em'}}>
       <List divided relaxed>
         {props.selectedFilters.map((column, index) => (
           <List.Item>
             <List.Content>
-              <FilterGrid index={index} removeFilter={props.removeFilter}/>
+              <FilterGrid index={index} column = {column} removeFilter={props.removeFilter} updateSelectedfilters={props.updateSelectedfilters} filterableColumns={props.filterableColumns}/>
             </List.Content>
           </List.Item>
         ))}
@@ -33,13 +35,25 @@ const FilterDiv = props => {
 
 const FilterGrid = props => {
   return (
-    <Grid columns={4} divided>
+    <Grid columns={5} divided>
       <Grid.Row>
         <Grid.Column>
             <Icon name='remove' onClick={() => props.removeFilter(props.index)}/>
         </Grid.Column>
         <Grid.Column>
-            Where
+          <Select
+            isSearchable={false}
+            options={predicateOptions}
+            value={{value: props.column.predicate, label: props.column.predicate}}
+            onChange={(value) => props.updateSelectedfilters('predicate',value.value, props.index)}
+          />
+        </Grid.Column>
+        <Grid.Column>
+          <Select
+            options={props.filterableColumns}
+            value={{value: props.column.attribute, label: props.column.attribute}}
+            onChange={(value) => props.updateSelectedfilters('attribute',value.value, props.index)}
+          />
         </Grid.Column>
         <Grid.Column>
           Contains
