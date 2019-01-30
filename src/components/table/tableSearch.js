@@ -69,7 +69,7 @@ class Search extends Component {
     return (
       <Input
         iconPosition="left"
-        placeholder={this.props.placeholder || 'Search...'}
+        placeholder={this.props.placeholder || 'Search all columns...'}
         style={styles.searchInputDiv}
         onChange={this.onChangeSearchText}>
         <Icon name="search" />

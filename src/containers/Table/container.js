@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { Icon, Label, Menu, Table, Checkbox } from 'semantic-ui-react'
+import { Icon, Label, Menu, Table, Checkbox, Grid } from 'semantic-ui-react'
 import TableActions from '../../components/table/tableActions';
 import HeaderSelector from '../../components/table/headerSelector';
 import TablePagination from '../../components/table/tablePagination';
 import Search from '../../components/table/tableSearch';
+import TableFilter from './tableFilter';
 import BulkActionList from '../../components/table/bulkActionDropdown';
 import { findPageRange, findStartPage, findCurrentData } from '../../components/table/utils';
 import { SetRowsPerPage, SetPages, SetCurrentPage } from './paginationReducer';
@@ -124,16 +125,26 @@ class TableComponent extends Component {
     const hasBulkActions = props.bulkActions.length
     return(
       <div>
-        <div>
-          <HeaderSelector hiddenColumnCount = {hiddenColumnCount} columns={table.columns.filter(c => !props.mandatoryFeilds.includes(c.column))} toggleColumns={this.toggleColumns}/>
-          <Search searchText={table.searchText} fullData={props.data}
-                  searchKeys={this.props.searchKeys}
-                  rowsPerPage={tablePagination.rowsPerPage}
-                  setSearchedData={this.setSearchedData}
-                />
-
-        {hasBulkActions && table.selectedRows.length ? <BulkActionList bulkActions={this.props.bulkActions} selectedRows={table.selectedRows}/> : null}
-        </div>
+        <Grid columns={3} divided>
+          <Grid.Row>
+            <Grid.Column>
+                <HeaderSelector hiddenColumnCount = {hiddenColumnCount} columns={table.columns.filter(c => !props.mandatoryFeilds.includes(c.column))} toggleColumns={this.toggleColumns}/>
+            </Grid.Column>
+            <Grid.Column>
+              <Search searchText={table.searchText} fullData={props.data} searchKeys={this.props.searchKeys}
+              rowsPerPage={tablePagination.rowsPerPage}
+              setSearchedData={this.setSearchedData}/>
+            </Grid.Column>
+            <Grid.Column>
+                {hasBulkActions && table.selectedRows.length ? <BulkActionList bulkActions={this.props.bulkActions} selectedRows={table.selectedRows}/> : null}
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <TableFilter/>
+            </Grid.Column>
+          </Grid.Row>
+      </Grid>
         <Table celled>
           <Table.Header>
             <Table.Row>
