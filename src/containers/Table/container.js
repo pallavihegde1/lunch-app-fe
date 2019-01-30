@@ -9,7 +9,7 @@ import TableFilter from './tableFilter';
 import BulkActionList from '../../components/table/bulkActionDropdown';
 import { findPageRange, findStartPage, findCurrentData } from '../../components/table/utils';
 import { SetRowsPerPage, SetPages, SetCurrentPage } from './paginationReducer';
-import { setColumns, setSearchedDataFound, setSearchText, setDefaultSortable, setBulkSelect, setSelectedRows} from './tableReducer';
+import { setColumns, setSearchedDataFound, setSearchText, setDefaultSortable, setBulkSelect, setSelectedRows, addFilterRow, removeFilterRow} from './tableReducer';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -105,6 +105,15 @@ class TableComponent extends Component {
     this.props.dispatch(setSelectedRows(selectedRows))
   }
 
+  addFilter = () => {
+    const firstFilterableAttribute = this.props.records.find(r => r.filterable && r.type)
+    this.props.dispatch(addFilterRow(firstFilterableAttribute || null))
+  }
+
+  removeFilter = (index) => {
+    this.props.dispatch(removeFilterRow(index))
+  }
+
   render(){
     const props = this.props
     const {table} = this.props
@@ -123,6 +132,7 @@ class TableComponent extends Component {
       tablePagination.rowsPerPage
     );
     const hasBulkActions = props.bulkActions.length
+    const filterableColumns = props.records.filter(r => r.filterable)
     return(
       <div>
         <Grid columns={3} divided>
@@ -141,7 +151,7 @@ class TableComponent extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              <TableFilter/>
+              <TableFilter filterableColumns={filterableColumns} selectedFilters={table.selectedFilters} addFilter={this.addFilter} removeFilter={this.removeFilter}/>
             </Grid.Column>
           </Grid.Row>
       </Grid>
