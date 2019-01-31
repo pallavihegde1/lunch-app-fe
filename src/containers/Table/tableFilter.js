@@ -17,24 +17,38 @@ class TableFilter extends Component {
 }
 
 const FilterDiv = props => {
+  const indexOnePredicate = props.selectedFilters.length > 1 ? props.selectedFilters[1].predicate : null
   return (
     <div style={{width: '60em'}}>
       <List divided relaxed>
         {props.selectedFilters.map((column, index) => (
           <List.Item>
             <List.Content>
-              <FilterGrid index={index} column = {column} removeFilter={props.removeFilter} updateSelectedfilters={props.updateSelectedfilters} filterableColumns={props.filterableColumns}/>
+              <FilterGrid index={index} column = {column} removeFilter={props.removeFilter} updateSelectedfilters={props.updateSelectedfilters}
+              indexOnePredicate={indexOnePredicate}
+              filterableColumns={props.filterableColumns}/>
             </List.Content>
           </List.Item>
         ))}
       </List>
     <Button onClick={props.addFilter}><Icon name='add'/> Add Filter </Button>
+    <Button onClick={props.applyFilter}> Apply Filter </Button>
     {/* <p><Button> Apply Filters </Button></p> */}
     </div>
   )
 }
 
 const FilterGrid = props => {
+  let predicateOptionConditions = []
+  if(props.index === 0){
+    predicateOptionConditions=  [{value: 'Where', label: 'Where'}]
+  }
+  else if(props.index > 1) {
+    predicateOptionConditions = [{value: props.indexOnePredicate, label: props.indexOnePredicate}]
+  }
+  else {
+    predicateOptionConditions = predicateOptions
+  }
   return (
     <Grid columns={5} divided>
       <Grid.Row>
@@ -44,7 +58,7 @@ const FilterGrid = props => {
         <Grid.Column>
           <Select
             isSearchable={false}
-            options={props.index === 0 ? [{value: 'Where', label: 'Where'}] : predicateOptions}
+            options={predicateOptionConditions}
             value={{value: props.column.predicate, label: props.column.predicate}}
             onChange={(value) => props.updateSelectedfilters('predicate',value.value, props.index)}
           />

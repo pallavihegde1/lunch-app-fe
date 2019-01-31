@@ -1,4 +1,5 @@
 import createReducer from '../../lib/createReducer';
+import { loopFilters } from './utils';
 
 let actions = {};
 actions.SET_COLUMNS = '/containers/table/SET_COLUMNS';
@@ -109,6 +110,21 @@ export function updateFilterRow(attribute, value, index) {
       let filterTobeUpdated = filters[index]
       filterTobeUpdated[attribute] = value
       dispatch(setSelectedFilters(filters))
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+}
+
+export function applyFilterData() {
+  return async function(dispatch, getState) {
+    try {
+      const state = getState()
+      const searchedDataFound = state.table.searchedDataFound
+      const selectedFilters = state.table.selectedFilters
+      loopFilters(searchedDataFound, selectedFilters)
+      // alert('applied')
     }
     catch (error) {
       console.error(error);
