@@ -121,10 +121,10 @@ export function applyFilterData() {
   return async function(dispatch, getState) {
     try {
       const state = getState()
-      const searchedDataFound = state.table.searchedDataFound
+      let searchedDataFound = state.table.searchedDataFound
       const selectedFilters = state.table.selectedFilters
-      loopFilters(searchedDataFound, selectedFilters)
-      // alert('applied')
+      searchedDataFound = loopFilters(searchedDataFound, selectedFilters)
+      dispatch(setSearchedDataFound(searchedDataFound))
     }
     catch (error) {
       console.error(error);
