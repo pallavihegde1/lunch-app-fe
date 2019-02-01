@@ -2,10 +2,10 @@ import _ from 'lodash';
 
 export const queryCondition = (attrValue, searchValue, query) => {
   switch (query) {
-    case 'Contains': return attrValue.includes(searchValue);
-    case 'Does Not Contain': return !attrValue.includes(searchValue);
-    case 'Is': return attrValue === searchValue;
-    case 'IsNot': return attrValue !== searchValue;
+    case 'Contains': return attrValue && attrValue.includes(searchValue);
+    case 'Does Not Contain': return attrValue && !attrValue.includes(searchValue);
+    case 'Is': return attrValue && attrValue === searchValue;
+    case 'IsNot': return attrValue && attrValue !== searchValue;
     case 'Is Empty': return _.isEmpty(attrValue);
     case 'Is Not Empty': return !_.isEmpty(attrValue);
     default: return;
