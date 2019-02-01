@@ -77,9 +77,10 @@ const FilterGrid = props => {
             onChange={(value) => props.updateSelectedfilters('query',value.value, props.index)}
           />
         </Grid.Column>
+        {['Is Empty', 'Is Not Empty'].includes(props.column.query) ? null :
         <Grid.Column>
             <Input placeholder='Search...' onBlur={(e) => props.updateSelectedfilters('value',e.target.value, props.index)}/>
-        </Grid.Column>
+        </Grid.Column> }
       </Grid.Row>
   </Grid>
   )
