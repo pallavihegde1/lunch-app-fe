@@ -9,7 +9,7 @@ import TableFilter from './tableFilter';
 import BulkActionList from '../../components/table/bulkActionDropdown';
 import { findPageRange, findStartPage, findCurrentData } from '../../components/table/utils';
 import { SetRowsPerPage, SetPages, SetCurrentPage } from './paginationReducer';
-import { setColumns, setSearchedDataFound, setSearchText, setDefaultSortable, setBulkSelect, setSelectedRows, addFilterRow, removeFilterRow, updateFilterRow, applyFilterData} from './tableReducer';
+import { setColumns, setSearchedDataFound, setFilteredDataFound, setSearchText, setDefaultSortable, setBulkSelect, setSelectedRows, addFilterRow, removeFilterRow, updateFilterRow, applyFilterData} from './tableReducer';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -29,6 +29,7 @@ class TableComponent extends Component {
     this.props.dispatch(SetPages(numberOfPages))
     this.props.dispatch(setColumns(columns))
     this.props.dispatch(setSearchedDataFound(searchedDataFound))
+    this.props.dispatch(setFilteredDataFound(searchedDataFound))
     this.props.dispatch(setDefaultSortable(defaultSortable))
   }
 
@@ -37,8 +38,10 @@ class TableComponent extends Component {
       const numberOfPages = Math.ceil(
        prevProps.data.length / this.props.tablePagination.rowsPerPage.value
       )
+      const searchedDataFound = this.sortedData(this.props.data)
       this.props.dispatch(SetPages(numberOfPages))
-      this.props.dispatch(setSearchedDataFound(this.props.data))
+      this.props.dispatch(setSearchedDataFound(searchedDataFound))
+      this.props.dispatch(setFilteredDataFound(searchedDataFound))
     }
   }
 
@@ -64,7 +67,7 @@ class TableComponent extends Component {
       : { value: 10, label: '10 Items' };
     let currentPage = this.props.tablePagination.currentPage;
     const numberOfPages = Math.ceil(
-      this.props.table.searchedDataFound.length / selectedRowsPerPage.value
+      this.props.table.filteredDataFound.length / selectedRowsPerPage.value
     );
     if (numberOfPages < currentPage) currentPage = numberOfPages;
     this.props.dispatch(SetCurrentPage(currentPage))
@@ -73,26 +76,26 @@ class TableComponent extends Component {
   };
 
   setSearchedData = (
-  searchedDataFound,
+  filteredDataFound,
   numberOfPages,
   searchText,
   currentPage = this.props.tablePagination.currentPage
   ) => {
-    searchedDataFound = this.sortedData(searchedDataFound)
+    filteredDataFound = this.sortedData(filteredDataFound)
     this.props.dispatch(SetCurrentPage(currentPage))
     this.props.dispatch(SetPages(numberOfPages))
-    this.props.dispatch(setSearchedDataFound(searchedDataFound))
+    this.props.dispatch(setFilteredDataFound(filteredDataFound))
     this.props.dispatch(setSearchText(searchText))
   };
 
   updateDefaultSortable = async(column) => {
     await this.props.dispatch(setDefaultSortable(column.column))
-    const searchedDataFound = this.sortedData(this.props.table.searchedDataFound)
-    this.props.dispatch(setSearchedDataFound(searchedDataFound))
+    const filteredDataFound = this.sortedData(this.props.table.filteredDataFound)
+    this.props.dispatch(setFilteredDataFound(filteredDataFound))
   }
 
   enableBulkSelect = ({checked}) => {
-    const selectedRows = checked ? this.props.table.searchedDataFound.map(i => i._id) : []
+    const selectedRows = checked ? this.props.table.filteredDataFound.map(i => i._id) : []
     this.props.dispatch(setBulkSelect(checked))
     this.props.dispatch(setSelectedRows(selectedRows))
   }
@@ -135,7 +138,7 @@ class TableComponent extends Component {
     const pageRange = findPageRange(tablePagination.numberOfPages, startPage);
     //slice current data set
     const currentData = findCurrentData(
-      table.searchedDataFound,
+      table.filteredDataFound,
       tablePagination.currentPage,
       tablePagination.rowsPerPage
     );

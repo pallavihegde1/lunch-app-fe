@@ -4,6 +4,7 @@ import { loopFilters } from './utils';
 let actions = {};
 actions.SET_COLUMNS = '/containers/table/SET_COLUMNS';
 actions.SET_SEARCHED_DATA_FOUND = '/containers/table/SET_SEARCHED_DATA_FOUND';
+actions.SET_FILTERED_DATA_FOUND = '/containers/table/SET_FILTERED_DATA_FOUND';
 actions.SEARCH_TEXT = '/containers/table/SEARCH_TEXT';
 actions.SET_DEFAULT_SORTABLE = '/containers/table/SET_DEFAULT_SORTABLE';
 actions.SET_BULK_SELECT = 'containers/table/SET_BULK_SELECT';
@@ -13,6 +14,7 @@ actions.SET_SELECTED_FILTERS = 'containers/table/SET_SELECTED_FILTERS';
 const initialState = {
   columns: [],
   searchedDataFound: [],
+  filteredDataFound: [],
   searchText: '',
   defaultSortable: '',
   bulkSelect: false,
@@ -31,6 +33,13 @@ export function setSearchedDataFound(payload){
   return {
     type: actions.SET_SEARCHED_DATA_FOUND,
     payload: {searchedDataFound: payload}
+  }
+}
+
+export function setFilteredDataFound(payload){
+  return {
+    type: actions.SET_FILTERED_DATA_FOUND,
+    payload: {filteredDataFound: payload}
   }
 }
 
@@ -123,8 +132,8 @@ export function applyFilterData() {
       const state = getState()
       let searchedDataFound = state.table.searchedDataFound
       const selectedFilters = state.table.selectedFilters
-      searchedDataFound = loopFilters(searchedDataFound, selectedFilters)
-      dispatch(setSearchedDataFound(searchedDataFound))
+      const filteredDataFound = loopFilters(searchedDataFound, selectedFilters)
+      dispatch(setFilteredDataFound(filteredDataFound))
     }
     catch (error) {
       console.error(error);
@@ -137,6 +146,9 @@ export const table = createReducer(initialState, {
     return { ...state, ...action.payload };
   },
   [actions.SET_SEARCHED_DATA_FOUND](state, action) {
+    return { ...state, ...action.payload };
+  },
+  [actions.SET_FILTERED_DATA_FOUND](state, action) {
     return { ...state, ...action.payload };
   },
   [actions.SEARCH_TEXT](state, action) {

@@ -20,9 +20,9 @@ export const andFunction = (data, attr, searchValue, query) => {
 
 export const loopFilters = (data, filters) => {
   let filteredData = data
-  filters.forEach(filter => {
-    debugger
-    filteredData = andFunction(filteredData, filter.attribute, filter.value, filter.query)
+  filters.forEach((filter, index) => {
+    const filterableData = index === 0 ? data : filteredData
+    filteredData = andFunction(filterableData, filter.attribute, filter.value, filter.query)
   })
   return filteredData;
 }
