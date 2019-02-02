@@ -29,7 +29,7 @@ class MenuItemList extends Component {
         MenuItem list
         {/* <Button>New Item</Button> */}
         <TableContainer data={menuItems}
-          records={[{header: 'Name', column: 'name', sortable: true, filterable: true, type: 'string'},{header: 'Description', column: 'desc', sortable: true, type: 'string'}, {header: 'Category', column: 'category', filterable: true, type: 'dropdown'}, {header: 'Availablity', column: 'availablity'},{header: 'Expertised', column: 'isExpertised'}, {header: 'Feasible', column: 'isFeasible'}, {header: 'Actions', column: 'action'}]}
+          records={[{header: 'Name', column: 'name', sortable: true, filterable: true, type: 'string'},{header: 'Description', column: 'desc', sortable: true, type: 'string'}, {header: 'Category', column: 'category', filterable: true, type: 'dropdown', options: []}, {header: 'Availablity', column: 'availablity'},{header: 'Expertised', column: 'isExpertised'}, {header: 'Feasible', column: 'isFeasible'}, {header: 'Actions', column: 'action'}]}
           includeAction
           complexRecords={['availablity']}
           mandatoryFeilds={['name']}

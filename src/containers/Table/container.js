@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { Icon, Label, Menu, Table, Checkbox, Grid } from 'semantic-ui-react'
+import { Icon, Label, Table, Checkbox, Grid } from 'semantic-ui-react'
 import TableActions from '../../components/table/tableActions';
 import HeaderSelector from '../../components/table/headerSelector';
 import TablePagination from '../../components/table/tablePagination';
@@ -15,7 +15,7 @@ import _ from 'lodash';
 
 class TableComponent extends Component {
 
-  componentWillMount(){
+  componentDidMount(){
     const numberOfPages = Math.ceil(
      this.props.data.length / this.props.tablePagination.rowsPerPage.value
     )
@@ -109,7 +109,7 @@ class TableComponent extends Component {
   }
 
   addFilter = () => {
-    const firstFilterableAttribute = this.props.records.find(r => r.filterable && r.type)
+    const firstFilterableAttribute = this.props.records.find(r => r.filterable && r.type === 'string')
     this.props.dispatch(addFilterRow(firstFilterableAttribute || null))
   }
 

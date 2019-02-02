@@ -87,6 +87,7 @@ export function addFilterRow(attribute) {
       newFilter.attribute = attribute.column
       newFilter.query = 'Contains'
       newFilter.value = ''
+      newFilter.type='string'
       filters.push(newFilter)
       dispatch(setSelectedFilters(filters))
     }
