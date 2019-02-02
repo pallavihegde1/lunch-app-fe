@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Popup, Button, Icon, List, Grid, Input } from 'semantic-ui-react'
 import Select from 'react-select';
+import PropTypes from 'prop-types';
 import { predicateOptions, filterQueriesOptions } from '../constants';
 
 class TableFilter extends Component {
@@ -92,6 +93,15 @@ const InputCategories = (props) => {
       value={props.column.value}
       onChange={(e) => props.updateSelectedfilters('value',e.target.value, props.index)}/> : null
   )
+}
+
+FilterDiv.propTypes = {
+  filterableColumns: PropTypes.array.isRequired,
+  selectedFilters: PropTypes.array.isRequired,
+  addFilter: PropTypes.func.isRequired,
+  removeFilter: PropTypes.func.isRequired,
+  applyFilter: PropTypes.func.isRequired,
+  updateSelectedfilters: PropTypes.func.isRequired,
 }
 
 FilterDiv.defaultProps = {

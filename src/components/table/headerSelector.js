@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Popup, List, Icon, Checkbox } from 'semantic-ui-react'
-
+ import PropTypes from 'prop-types';
 
 const ColumnList = (props) => {
   return(
@@ -27,6 +27,17 @@ const HeaderSelector = (props) => {
         />
       </div>
   );
+}
+
+HeaderSelector.propTypes = {
+  hiddenColumnCount: PropTypes.number.isRequired,
+  columns: PropTypes.array.isRequired,
+  toggleColumns: PropTypes.func.isRequired
+
+}
+
+HeaderSelector.defaultProps = {
+  columns: [],
 }
 
 export default HeaderSelector;

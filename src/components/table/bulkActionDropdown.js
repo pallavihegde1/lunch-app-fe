@@ -1,5 +1,6 @@
 import React from 'react';
 import {Dropdown } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
 const BulkActionList = (props) => {
   return (
@@ -14,5 +15,16 @@ const BulkActionList = (props) => {
     </>
   )
 }
+
+BulkActionList.propTypes = {
+  bulkActions: PropTypes.array.isRequired,
+  selectedRows: PropTypes.array.isRequired
+};
+
+BulkActionList.defaultProps = {
+  bulkActions: [],
+  selectedRows: [],
+}
+
 
 export default BulkActionList;

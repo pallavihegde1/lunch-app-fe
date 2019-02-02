@@ -118,7 +118,7 @@ const TablePagination = props => {
 TablePagination.propTypes = {
   pageRange: PropTypes.array.isRequired,
   currentPage: PropTypes.number.isRequired,
-  numberOfPages: PropTypes.number.isRequired,
+  numberOfPages: PropTypes.number,
   name: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
   numberOfColumns: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -128,6 +128,7 @@ TablePagination.propTypes = {
 };
 
 TablePagination.defaultProps = {
-   pageRange: []
+   pageRange: [],
+   rowsPerPage: {},
 }
 export default TablePagination;

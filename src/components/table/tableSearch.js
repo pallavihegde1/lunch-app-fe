@@ -110,6 +110,14 @@ Search.propTypes = {
   searchKeys: PropTypes.object.isRequired,
   rowsPerPage: PropTypes.object.isRequired,
   setSearchedData: PropTypes.func.isRequired,
+  fullData: PropTypes.array.isRequired,
 };
+
+Search.defaultProps = {
+  searchText: '',
+  fullData: [],
+  searchKeys: {},
+  rowsPerPage: {}
+}
 
 export default Search;
