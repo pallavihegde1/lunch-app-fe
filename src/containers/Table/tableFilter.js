@@ -22,7 +22,7 @@ const FilterDiv = props => {
     <div style={{width: '60em'}}>
       <List divided relaxed>
         {props.selectedFilters.map((column, index) => (
-          <List.Item>
+          <List.Item key={index}>
             <List.Content>
               <FilterGrid index={index} column = {column} removeFilter={props.removeFilter} updateSelectedfilters={props.updateSelectedfilters}
               indexOnePredicate={indexOnePredicate}

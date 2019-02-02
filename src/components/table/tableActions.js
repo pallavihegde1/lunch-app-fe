@@ -12,8 +12,8 @@ const findColor = (action) => {
 const TableActions = (props) =>  {
   return (
     <div>
-      {props.actions.map((action) => (
-        <Button color={findColor(action.action)} onClick={() => action.function([props.ids])}> {action.action} </Button>
+      {props.actions.map((action, index) => (
+        <Button key={index} color={findColor(action.action)} onClick={() => action.function([props.ids])}> {action.action} </Button>
       ))}
     </div>
   )

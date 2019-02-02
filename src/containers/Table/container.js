@@ -172,23 +172,23 @@ class TableComponent extends Component {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>{hasBulkActions ? <Checkbox checked={table.bulkSelect} onChange={(e, {checked}) => this.enableBulkSelect({checked})}/> : null } Sl.no</Table.HeaderCell>
-              {visibleColumns.map((column) => (
-                <Table.HeaderCell onClick={() => this.updateDefaultSortable(column)}>{column.column === table.defaultSortable ? <Icon name='arrow down'/> : null } {column.header}</Table.HeaderCell>
+              {visibleColumns.map((column, index) => (
+                <Table.HeaderCell key={index} onClick={() => this.updateDefaultSortable(column)}>{column.column === table.defaultSortable ? <Icon name='arrow down'/> : null } {column.header}</Table.HeaderCell>
               ))}
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {currentData.map((data, index) => (
-              <Table.Row>
+              <Table.Row key={index}>
                 <Table.Cell>
                   <Label ribbon>
                     {(tablePagination.currentPage - 1) * tablePagination.rowsPerPage.value + index + 1}
                   </Label>
                   {hasBulkActions ? <Checkbox checked={table.selectedRows.includes(data._id)} onChange={(e, {checked}) => this.updateSelectedRows({checked}, data._id)}/> :  null}
                 </Table.Cell>
-                {visibleColumns.map(c => c.column).map((cell) => (
+                {visibleColumns.map(c => c.column).map((cell, index1) => (
                   cell !== 'action' ?
-                  <Table.Cell> {props.complexRecords.includes(cell) ? props.findComplexRecords(cell, data[cell])  : data[cell]} </Table.Cell> : <Table.Cell> <TableActions actions={props.actions} ids={data._id}/> </Table.Cell>
+                  <Table.Cell key={index1}> <span> {props.complexRecords.includes(cell) ? props.findComplexRecords(cell, data[cell])  : data[cell]} </span> </Table.Cell> : <Table.Cell key={index1}> <TableActions actions={props.actions} ids={data._id}/> </Table.Cell>
                 ))}
               </Table.Row>
             ))}
