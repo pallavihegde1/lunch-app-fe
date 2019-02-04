@@ -80,7 +80,7 @@ const FilterGrid = props => {
         </Grid.Column>
         {['Is Empty', 'Is Not Empty'].includes(props.column.query) ? null :
         <Grid.Column>
-           <InputCategories column={props.column} updateSelectedfilters={props.updateSelectedfilters}/>
+           <InputCategories column={props.column} updateSelectedfilters={props.updateSelectedfilters} index={props.index}/>
         </Grid.Column> }
       </Grid.Row>
   </Grid>
@@ -88,11 +88,18 @@ const FilterGrid = props => {
 }
 
 const InputCategories = (props) => {
-  return (
-    props.column.type === 'string' ? <Input placeholder='Search...'
-      value={props.column.value}
-      onChange={(e) => props.updateSelectedfilters('value',e.target.value, props.index)}/> : null
-  )
+  if(props.column.type === 'string' ) {
+    return (
+      <Input placeholder='Search...'
+        value={props.column.value}
+        onChange={(e) => props.updateSelectedfilters('value',e.target.value, props.index)}/>
+    )
+  }
+  else if(props.column.type === 'dropdown') {
+    return (
+      'Dropdown'
+    )
+  }
 }
 
 FilterDiv.propTypes = {

@@ -87,7 +87,7 @@ export function addFilterRow(attribute) {
       newFilter.attribute = attribute.column
       newFilter.query = 'Contains'
       newFilter.value = ''
-      newFilter.type='string'
+      newFilter.type=attribute.type
       filters.push(newFilter)
       dispatch(setSelectedFilters(filters))
     }
@@ -116,9 +116,13 @@ export function removeFilterRow(index) {
 export function updateFilterRow(attribute, value, index) {
   return async function(dispatch, getState) {
     try {
-      const filters = getState().table.selectedFilters
+      const store = getState()
+      const filters = store.table.selectedFilters
+      const columns = store.table.columns
+      const attrType = (columns.find(i => i.column === value) || {}).type
       let filterTobeUpdated = filters[index]
       filterTobeUpdated[attribute] = value
+      filterTobeUpdated['type'] = attrType || ''
       dispatch(setSelectedFilters(filters))
     }
     catch (error) {

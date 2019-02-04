@@ -5,8 +5,8 @@ import { Button, Popup, List, Icon, Checkbox } from 'semantic-ui-react'
 const ColumnList = (props) => {
   return(
     <>
-      {props.columns.map((column) => (
-        <List>
+      {props.columns.map((column, index) => (
+        <List key={index}>
           <List.Item>
             <Checkbox checked={!column.value} toggle onChange={(e, {checked}) => props.toggleColumns(column.header, {checked})}/>
             <List.Content>{column.header}</List.Content>
