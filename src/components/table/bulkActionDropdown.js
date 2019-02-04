@@ -7,8 +7,8 @@ const BulkActionList = (props) => {
     <>
       <Dropdown text= {`Bulk Action (${props.selectedRows.length} selected)`}>
       <Dropdown.Menu>
-        {props.bulkActions.map((action) => (
-          <Dropdown.Item text={action.action}  onClick={() => action.function(props.selectedRows)}/>
+        {props.bulkActions.map((action, index) => (
+          <Dropdown.Item key={index} text={action.action}  onClick={() => action.function(props.selectedRows)}/>
         ))}
       </Dropdown.Menu>
     </Dropdown>

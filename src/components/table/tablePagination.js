@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
 
-// const Radium = require('radium');
-
 const rowsPerPageOptions = [5, 10, 20, 50].map(num => ({
   value: num,
   label: `${num} Items`,
