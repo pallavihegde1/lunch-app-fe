@@ -120,6 +120,7 @@ export function updateFilterRow(attribute, value, index) {
       const filters = store.table.selectedFilters
       const columns = store.table.columns
       let filterTobeUpdated = filters[index]
+      filterTobeUpdated['value'] = null
       filterTobeUpdated[attribute] = value
       if(attribute === 'attribute') {
         const attrType = (columns.find(i => i.column === filterTobeUpdated[attribute]) || {}).type

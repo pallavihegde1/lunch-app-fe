@@ -90,7 +90,6 @@ const FilterGrid = props => {
 }
 
 const InputCategories = (props) => {
-  debugger
   if(props.column.type === 'string' ) {
     return (
       <Input placeholder='Search...'
@@ -102,8 +101,8 @@ const InputCategories = (props) => {
     return (
       <Select
         options={findColumnOptions(props.filterableColumns, props.column.attribute)}
-        value={{value: null, label: null}}
-        onChange={(value) => props.updateSelectedfilters('value',value.value, props.index)}
+        value={props.column.value}
+        onChange={(value) => props.updateSelectedfilters('value',value, props.index)}
       />
     )
   }else{
