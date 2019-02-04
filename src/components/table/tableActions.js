@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react'
+import PropTypes from 'prop-types';
 
 const findColor = (action) => {
   switch (action) {
@@ -18,5 +19,17 @@ const TableActions = (props) =>  {
     </div>
   )
 }
+
+TableActions.propTypes = {
+  actions: PropTypes.array.isRequired,
+  ids: PropTypes.string.isRequired,
+
+}
+
+TableActions.defaultProps = {
+  actions: [],
+  ids: ''
+}
+
 
 export default TableActions;

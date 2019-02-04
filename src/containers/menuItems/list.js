@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import TableContainer from '../Table/container';
 import { fetchMenuItems, deleteMenuItems } from './reducer';
+import { createPropertyOption } from '../../components/selectUtils'
 import { Button } from 'semantic-ui-react'
 import { connect } from 'react-redux';
 
@@ -29,7 +30,7 @@ class MenuItemList extends Component {
         MenuItem list
         {/* <Button>New Item</Button> */}
         <TableContainer data={menuItems}
-          records={[{header: 'Name', column: 'name', sortable: true, filterable: true, type: 'string'},{header: 'Description', column: 'desc', sortable: true, type: 'string'}, {header: 'Category', column: 'category', filterable: true, type: 'dropdown', options: []}, {header: 'Availablity', column: 'availablity'},{header: 'Expertised', column: 'isExpertised'}, {header: 'Feasible', column: 'isFeasible'}, {header: 'Actions', column: 'action'}]}
+          records={[{header: 'Name', column: 'name', sortable: true, filterable: true, type: 'string'},{header: 'Description', column: 'desc', sortable: true, type: 'string'}, {header: 'Category', column: 'category', filterable: true, type: 'dropdown', options: this.props.categories.map(createPropertyOption('id', 'name'))}, {header: 'Availablity', column: 'availablity'},{header: 'Expertised', column: 'isExpertised'}, {header: 'Feasible', column: 'isFeasible'}, {header: 'Actions', column: 'action'}]}
           includeAction
           complexRecords={['availablity']}
           mandatoryFeilds={['name']}
@@ -44,7 +45,7 @@ class MenuItemList extends Component {
   }
 }
 
-const mapStateToProps = ({menuItems}) => ({menuItems})
+const mapStateToProps = ({menuItems, categories}) => ({menuItems, categories})
 
 export default connect(
     mapStateToProps,

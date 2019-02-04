@@ -3,6 +3,8 @@ import { Popup, Button, Icon, List, Grid, Input } from 'semantic-ui-react'
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { predicateOptions, filterQueriesOptions } from '../constants';
+import { findColumnOptions } from './utils';
+import { createPropertyOption } from '../../components/selectUtils'
 
 class TableFilter extends Component {
   render(){
@@ -66,7 +68,7 @@ const FilterGrid = props => {
         </Grid.Column>
         <Grid.Column>
           <Select
-            options={props.filterableColumns}
+            options={props.filterableColumns.map(createPropertyOption('column', 'header'))}
             value={{value: props.column.attribute, label: props.column.attribute}}
             onChange={(value) => props.updateSelectedfilters('attribute',value.value, props.index)}
           />
@@ -80,7 +82,7 @@ const FilterGrid = props => {
         </Grid.Column>
         {['Is Empty', 'Is Not Empty'].includes(props.column.query) ? null :
         <Grid.Column>
-           <InputCategories column={props.column} updateSelectedfilters={props.updateSelectedfilters} index={props.index}/>
+           <InputCategories column={props.column} updateSelectedfilters={props.updateSelectedfilters} index={props.index} filterableColumns={props.filterableColumns}/>
         </Grid.Column> }
       </Grid.Row>
   </Grid>
@@ -88,6 +90,7 @@ const FilterGrid = props => {
 }
 
 const InputCategories = (props) => {
+  debugger
   if(props.column.type === 'string' ) {
     return (
       <Input placeholder='Search...'
@@ -97,8 +100,14 @@ const InputCategories = (props) => {
   }
   else if(props.column.type === 'dropdown') {
     return (
-      'Dropdown'
+      <Select
+        options={findColumnOptions(props.filterableColumns, props.column.attribute)}
+        value={{value: null, label: null}}
+        onChange={(value) => props.updateSelectedfilters('value',value.value, props.index)}
+      />
     )
+  }else{
+    return null
   }
 }
 

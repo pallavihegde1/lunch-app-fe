@@ -143,9 +143,7 @@ class TableComponent extends Component {
       tablePagination.rowsPerPage
     );
     const hasBulkActions = props.bulkActions.length
-    const filterableColumns = props.records.filter(r => r.filterable).map(c => {
-      return {value: c.column, label: c.header}
-    })
+    const filterableColumns = props.records.filter(r => r.filterable)
     return(
       <div>
         <Grid columns={3} divided>

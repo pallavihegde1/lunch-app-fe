@@ -39,3 +39,9 @@ export const loopFilters = (data, filters) => {
     }
   }
 }
+
+export const findColumnOptions = (columns, attr) => {
+  debugger
+  const column = columns.find(c => c.column === attr)
+  return column.options || []
+}
